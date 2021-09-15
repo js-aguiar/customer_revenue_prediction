@@ -37,7 +37,8 @@ if __name__ == '__main__':
     parser.add_argument('--gamma', type=int)
     parser.add_argument('--min_child_weight', type=int)
     parser.add_argument('--subsample', type=float)
-    parser.add_argument('--alpha', type=float)
+    parser.add_argument('--reg_alpha', type=float)
+    parser.add_argument('--reg_lambda', type=float)
     parser.add_argument('--verbosity', type=int)
     parser.add_argument('--objective', type=str)
     parser.add_argument('--num_round', type=int)
@@ -70,7 +71,8 @@ if __name__ == '__main__':
         'gamma': args.gamma,
         'min_child_weight': args.min_child_weight,
         'subsample': args.subsample,
-        'alpha': args.alpha,
+        'reg_alpha': args.reg_alpha,
+        'reg_lambda': args.reg_lambda,
         'verbosity': args.verbosity,
         'objective': args.objective,
         'tree_method': args.tree_method,
