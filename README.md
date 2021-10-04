@@ -1,6 +1,6 @@
 # Customer Lifetime Revenue Model (CLTR)
 
-In this project, an end-to-end machine learning model is built to predict future customer revenue. The resulting model and ETL are deployed using AWS services. The main goal is to forecast a customer's revenue for the next 90 days given their purchase history (basket-level).
+In this project, an end-to-end machine learning model is built to predict future customer revenue. The main goal is to forecast a customer's revenue for the next 90 days based on their purchase history at the basket-level. The resulting model and ETL are deployed using AWS services.
 
 
 ## Model development
@@ -21,7 +21,7 @@ The final model is compared to the baseline using an out-of-time sample (test da
 
 #### Features
 
-The next figure shows the most important features and their relationship with the target variable using the Shap library. The rate between customer's total purchase amount and the number of days since his first transaction was the most important feature. The purchase amount in the last 90 days and the store (chain) is also important. More recent spending is rewarded from the fourth to the seventh feature. The std_date_amount is penalizing customers with a more unstable spending profile, while recency_to_unique_dates (average number of days between purchases) is rewarding a higher purchase frequency.
+The next figure shows the most important features and their relationship with the target variable using the Shap library. The rate between customer's total purchase amount and the number of days since his first transaction was the most important feature. The purchase amount in the last 90 days and the store (chain) are also important. More recent spending is rewarded from the fourth to the seventh feature. The std_date_amount is penalizing customers with a more unstable spending profile, while recency_to_unique_dates (average number of days between purchases) is rewarding a higher purchase frequency.
 
 
 ![shap-plot](https://user-images.githubusercontent.com/36202803/134818379-c229f2eb-53d8-4f21-b23f-16f31c68396c.png)
@@ -31,7 +31,12 @@ The next figure shows the most important features and their relationship with th
 
 ## Production enviroment (work in progress)
 
-In order to use the XGBoost model for online predictions, we need to: 1) update our features according to new transactions and 2) retrieve features according to the customer id and pass it to the model endpoint. To achieve that, 
+In order to use the final XGBoost model endpoint for online predictions, we need to:
+1) update our features according to new transactions;
+2) retrieve features according to the customer id and pass it to the model endpoint.
+3) return the predictions through an interface (API)
+
+The flowchart below shows the architecture that is being build to perform these three tasks. The most up-to-date transactional data is extracted from some database or S3 bucket, processed using a Glue ETL job and stored in a relational database through AWS RDS. In parallel, an API Gateway is ready to receive requests from an external application and invoke a Lambda function, which will retrieve features according to the customer id from the relational database and pass it to the model endpoint. The model predictions are finally returned to the application.
 
 ![prod-chart-png2](https://user-images.githubusercontent.com/36202803/134791839-a9fe620e-e59e-4ff8-a11a-b0c6dd1b3c7e.png)
 
